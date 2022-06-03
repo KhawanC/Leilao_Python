@@ -1,36 +1,57 @@
 import json
+class OrdemVenda:
+    def __init__(self, idVendedor:int, vendedorNome:str, item:str, lance_atual:int, lance_maximo:int, lance_minimo:int, qtd_lances:int, lances:list):
+        self.idVendedor = idVendedor
+        self.vendedorNome = vendedorNome
+        self.item = item
+        self.lance_atual = lance_atual
+        self.lance_maximo = lance_maximo
+        self.lance_minimo = lance_minimo
+        self.qtd_lances = qtd_lances
+        self.lances = lances
 
-def lerBancoDeDados() -> dict:
+class OrdemLance:
+    def __init__(self, idVendedor:int ,nome:str, valorLance:float):
+        self.idVendedor = idVendedor
+        self.nome = nome
+        self.valorLance = valorLance
+
+def lerBancoDeDados() -> list:
     try:
-        with open ('registros.json', 'r') as arq:
-            registros = json.load(arq)
-        return registros
+        with open ('registros.json', 'r', encoding='utf-8') as arq:
+            jsonList = json.load(arq)
+        return jsonList
     except FileNotFoundError as err:
         print(err)
 
-def inserirRegistro(banco:dict, registro:dict):
+def inserirVenda(banco:list, venda:object):
     try:
-        with open ('registros.json', 'w') as arq:
-            banco.
-            json.dump(registro, arq, ensure_ascii=False, indent=4)
-    except FileNotFoundError as err:
-        print(err)
+        banco.append(venda.__dict__)
+        with open('registros.json', 'w', encoding='utf-8') as arq:
+            json.dump(banco, arq, indent=2, separators=(',', ': '))
+    except FileNotFoundError:
+        print("Não foi possível achar o arquivo")
 
-def iniciarLeilao(nome:str, item:str, vMinimo:float, vMax:float) -> dict:
-    ordem = {
-            "Vendedor": nome,
-            "Item": item,
-            "Lance Atual": 0,
-            "Lance Minimo": vMinimo,
-            "Lance Máximo": vMax,
-            "Quantidade de Lances": 0,
-            "Lances":[]
-        }
+def inserirLance(banco:list, lance:object):
+    try:
+        banco[lance.idVendedor]["lances"].append(lance.__dict__)
+        with open('registros.json', 'w', encoding='utf-8') as arq:
+            json.dump(banco, arq, indent=2, separators=(',', ': '))
+    except FileNotFoundError:
+        print("Não foi possível achar o arquivo")
+
+def ordemDeVenda(idVendedor:int, nome:str, item:str, vMax:float, vMinimo:float) -> OrdemVenda:
+    ordem = OrdemVenda(idVendedor, nome, item, 0, vMax, vMinimo, 0, [])
     return ordem
 
-banco = lerBancoDeDados();
-registros = iniciarLeilao("Kaua", "Celular Lenovo", 300.0, 1200.0)
-inserirRegistro(banco, registros)
+def ordemDeLance(idVendedor:int, nome:str, valorLance:float) -> OrdemLance:
+    lance = OrdemLance(idVendedor, nome, valorLance)
+    return lance
 
-banco = lerBancoDeDados();
+jsonList = lerBancoDeDados()
 
+venda = ordemDeVenda(len(jsonList), "Kaua", "Moto", 18000, 300.0)
+lance = ordemDeLance(1, "Vinicius", 400)
+
+#inserirVenda(jsonList, venda)
+#inserirLance(jsonList, lance)
