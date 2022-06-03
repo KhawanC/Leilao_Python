@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "idVendedor": 0,
+    "vendedorNome": "Cesar",
+    "item": "Carro",
+    "lance_atual": 1900,
+    "lance_maximo": 18000,
+    "lance_minimo": 1200,
+    "qtd_lances": 0,
+    "status": "andamento",
+    "lances": [
+      {
+        "nome": "Vladimit",
+        "valorLance": 1500
+      },
+      {
+        "nome": "Wilson",
+        "valorLance": 1500
+      },
+      {
+        "nome": "Xarles",
+        "valorLance": 1900
+      }
+    ]
+  },
+  {
+    "idVendedor": 1,
+    "vendedorNome": "Cesar",
+    "item": "Carro",
+    "lance_atual": 0,
+    "lance_maximo": 18000,
+    "lance_minimo": 1200,
+    "qtd_lances": 0,
+    "status": "aberto",
+    "lances": []
+  }
+]
