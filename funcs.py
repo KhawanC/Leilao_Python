@@ -33,7 +33,7 @@ def lerBancoDeDados() -> list:
             jsonList = json.load(arq)
         return jsonList
     except FileNotFoundError as err:
-        print(err)
+        raise Exception("Não foi possível encontrar o arquivo JSON")
 
 #Função para inserir uma ordem de venda no JSON
 def inserirVenda(banco:list, venda:object):
@@ -49,7 +49,7 @@ def inserirVenda(banco:list, venda:object):
         with open('/home/kaua/github_clones/Leilao_Python/registros.json', 'w', encoding='utf-8') as arq:
             json.dump(banco, arq, indent=2, separators=(',', ': '))
     except FileNotFoundError:
-        print("Não foi possível achar o arquivo")
+        raise Exception("Não foi possível achar o arquivo JSON")
 
 #FUnção para inserir uma ordem de lance no JSON
 def inserirLance(banco:list, lance:object):
@@ -57,6 +57,8 @@ def inserirLance(banco:list, lance:object):
         indice = lance.idVendedor
         #Verificar se esse é o primeiro lance
         if(banco[indice]["lances"] == []):
+            if(lance.valorLance < banco[indice]["lance_minimo"]):
+                raise Exception("Não é possível criar um lance com valor menor que o lance mínimo")
             lance.__dict__.pop("idVendedor")
             banco[indice]["lances"].append(lance.__dict__)
             banco[indice]["lance_atual"] = lance.valorLance
@@ -72,7 +74,7 @@ def inserirLance(banco:list, lance:object):
         with open('/home/kaua/github_clones/Leilao_Python/registros.json', 'w', encoding='utf-8') as arq:
             json.dump(banco, arq, indent=2, separators=(',', ': '))
     except FileNotFoundError:
-        print("Não foi possível achar o arquivo")
+        raise Exception("Não foi possível achar o arquivo JSON")
 
 #Função para criar um objeto de ordem de venda com alguns valores zerados
 def ordemDeVenda(idVendedor:int, nome:str, item:str, vMax:float, vMinimo:float) -> OrdemVenda:
